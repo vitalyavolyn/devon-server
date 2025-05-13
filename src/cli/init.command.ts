@@ -1,6 +1,6 @@
 import { Command, CommandRunner } from 'nest-commander';
 import { MyshowsService } from '../integration/myshows.service';
-import { Initable } from '../types/initable';
+import { Initable } from '../types';
 import { LetterboxdService } from '../integration/letterboxd.service';
 import { LastfmService } from '../integration/lastfm.service';
 import { RetroachievementsService } from '../integration/retroachievements.service';

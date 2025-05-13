@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { InitCommand } from './init.command';
 import { IntegrationModule } from '../integration/integration.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ImportCommand } from './import.command';
+import { SamsungHealthImporter } from './importers/samsung-health.importer';
 
 @Module({
   imports: [
@@ -16,6 +18,6 @@ import { MongooseModule } from '@nestjs/mongoose';
       inject: [ConfigService],
     }),
   ],
-  providers: [InitCommand],
+  providers: [InitCommand, ImportCommand, SamsungHealthImporter],
 })
 export class CliModule {}
