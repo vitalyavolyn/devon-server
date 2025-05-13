@@ -37,8 +37,8 @@ export class WttrService {
     const area = state.nearest_area[0]?.areaName?.[0].value;
     return state.weather.map((report) => ({
       ...this.processSingleDay(report),
-      area,
-    }));
+      areaName: area,
+    })) as Wttr[];
   }
 
   private async getReports(latitude, longitude) {
