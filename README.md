@@ -43,6 +43,9 @@ $ yarn ts-node src/main.cli.ts init lastfm username api-key
 # Retroachievements
 $ yarn ts-node src/main.cli.ts init ra userrname-or-ulid api-key
 
+# Wakatime
+$ yarn ts-node src/main.cli.ts init wakatime api-key
+
 # Homeassistant for updating location
 # base url, access key and device name
 $ yarn ts-node src/main.cli.ts init hass https://hass.example.com long-lived-access-token device_tracker.my_iphone

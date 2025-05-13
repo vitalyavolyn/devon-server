@@ -5,6 +5,7 @@ import { LetterboxdService } from '../integration/letterboxd.service';
 import { LastfmService } from '../integration/lastfm.service';
 import { RetroachievementsService } from '../integration/retroachievements.service';
 import { HomeassistantGpsService } from '../integration/homeassistant-gps.service';
+import { WakatimeService } from '../integration/wakatime.service';
 
 @Command({ name: 'init', description: 'Run initial integration setup' })
 export class InitCommand extends CommandRunner {
@@ -14,6 +15,7 @@ export class InitCommand extends CommandRunner {
     private readonly lastfmService: LastfmService,
     private readonly retroachievementsService: RetroachievementsService,
     private readonly homeassistantGpsService: HomeassistantGpsService,
+    private readonly wakatimeService: WakatimeService,
   ) {
     super();
   }
@@ -32,6 +34,8 @@ export class InitCommand extends CommandRunner {
         return this.retroachievementsService;
       case 'hass':
         return this.homeassistantGpsService;
+      case 'wakatime':
+        return this.wakatimeService;
       default:
         return null;
     }

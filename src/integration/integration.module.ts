@@ -16,6 +16,8 @@ import { LocationSchema } from './schema/location.schema';
 import { HomeassistantGpsService } from './homeassistant-gps.service';
 import { WttrSchema } from './schema/wttr.schema';
 import { WttrService } from './wttr.service';
+import { WakatimeSchema } from './schema/wakatime.schema';
+import { WakatimeService } from './wakatime.service';
 
 @Module({
   imports: [
@@ -34,6 +36,7 @@ import { WttrService } from './wttr.service';
       { name: 'Retroachievements', schema: RetroachievementsSchema },
       { name: 'Location', schema: LocationSchema },
       { name: 'Wttr', schema: WttrSchema },
+      { name: 'Wakatime', schema: WakatimeSchema },
     ]),
   ],
   controllers: [],
@@ -45,6 +48,7 @@ import { WttrService } from './wttr.service';
     RetroachievementsService,
     HomeassistantGpsService,
     WttrService,
+    WakatimeService,
   ],
   exports: [
     MyshowsService,
@@ -53,6 +57,7 @@ import { WttrService } from './wttr.service';
     RetroachievementsService,
     HomeassistantGpsService,
     WttrService,
+    WakatimeService,
   ],
 })
 export class IntegrationModule {}

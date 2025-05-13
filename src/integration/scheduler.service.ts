@@ -9,6 +9,7 @@ import { LastfmService } from './lastfm.service';
 import { RetroachievementsService } from './retroachievements.service';
 import { HomeassistantGpsService } from './homeassistant-gps.service';
 import { WttrService } from './wttr.service';
+import { WakatimeService } from './wakatime.service';
 
 @Injectable()
 // TODO: refactor
@@ -22,6 +23,7 @@ export class SchedulerService {
     private readonly retroachievementsService: RetroachievementsService,
     private readonly homeassistantGpsService: HomeassistantGpsService,
     private readonly wttrService: WttrService,
+    private readonly wakatimeService: WakatimeService,
     @InjectModel(Integration.name) private integrationModel: Model<Integration>,
   ) {}
 
@@ -128,6 +130,24 @@ export class SchedulerService {
       this.logger.error('Wttr', e);
       await this.integrationModel.updateOne(
         { integration: 'wttr' },
+        { status: 'error' },
+      );
+    }
+  }
+
+  @Cron(CronExpression.EVERY_30_MINUTES)
+  async updateWakatime() {
+    // this.logger.log('Updating wakatime');
+    try {
+      await this.wakatimeService.fetchUpdates();
+      await this.integrationModel.updateOne(
+        { integration: 'wakatime' },
+        { status: 'ok', lastSync: new Date() },
+      );
+    } catch (e) {
+      this.logger.error('Wakatime', e);
+      await this.integrationModel.updateOne(
+        { integration: 'wakatime' },
         { status: 'error' },
       );
     }
