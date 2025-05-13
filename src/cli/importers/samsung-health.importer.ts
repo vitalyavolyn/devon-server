@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Injectable, Logger } from '@nestjs/common';
 import * as fs from 'fs';
 import { parse } from 'csv';
@@ -29,8 +30,8 @@ export class SamsungHealthImporter {
       )
       .on('data', (row) => {
         console.log(row);
-        const start = new Date(row[48]);
-        const end = new Date(row[59]);
+        const start = new Date(row[48] as string);
+        const end = new Date(row[59] as string);
 
         if (isNaN(start.getTime()) || isNaN(end.getTime())) {
           this.logger.warn(`Invalid date in row: ${JSON.stringify(row)}`);

@@ -117,7 +117,7 @@ export class LetterboxdService {
       this.httpService.get(`https://letterboxd.com/${loginInfo.value}/rss/`),
     );
 
-    const $ = cheerio.load(rssResponse.data, { xml: true });
+    const $ = cheerio.load(rssResponse.data as string, { xml: true });
 
     const reviews = $('item').toArray();
     for (const review of reviews) {

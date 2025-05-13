@@ -247,7 +247,8 @@ export class MyshowsService {
 
     const newItems: Myshows[] = [];
     for (const feedItem of feedResponse.data.result) {
-      if (new Date(feedItem.createdAt) < integrationInfo.lastSync) continue;
+      if (new Date(feedItem.createdAt as string) < integrationInfo.lastSync)
+        continue;
       if (feedItem.type !== 'e.check') continue;
 
       for (const episode of feedItem.episodes) {
