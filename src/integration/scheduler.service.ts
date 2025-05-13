@@ -1,0 +1,135 @@
+import { Injectable, Logger } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import { MyshowsService } from './myshows.service';
+import { InjectModel } from '@nestjs/mongoose';
+import { Integration } from './schema/integration.schema';
+import { Model } from 'mongoose';
+import { LetterboxdService } from './letterboxd.service';
+import { LastfmService } from './lastfm.service';
+import { RetroachievementsService } from './retroachievements.service';
+import { HomeassistantGpsService } from './homeassistant-gps.service';
+import { WttrService } from './wttr.service';
+
+@Injectable()
+// TODO: refactor
+export class SchedulerService {
+  private readonly logger = new Logger(SchedulerService.name);
+
+  constructor(
+    private readonly myshowsService: MyshowsService,
+    private readonly letterboxdService: LetterboxdService,
+    private readonly lastfmService: LastfmService,
+    private readonly retroachievementsService: RetroachievementsService,
+    private readonly homeassistantGpsService: HomeassistantGpsService,
+    private readonly wttrService: WttrService,
+    @InjectModel(Integration.name) private integrationModel: Model<Integration>,
+  ) {}
+
+  @Cron(CronExpression.EVERY_30_MINUTES)
+  async updateMyshows() {
+    // this.logger.log('Updating myshows episodes');
+    try {
+      await this.myshowsService.fetchUpdates();
+      await this.integrationModel.updateOne(
+        { integration: 'myshows' },
+        { status: 'ok', lastSync: new Date() },
+      );
+    } catch (e) {
+      this.logger.error('Myshows', e);
+      await this.integrationModel.updateOne(
+        { integration: 'myshows' },
+        { status: 'error' },
+      );
+    }
+  }
+
+  @Cron(CronExpression.EVERY_10_MINUTES)
+  async updateLetterboxd() {
+    // this.logger.log('Updating letterboxd');
+    try {
+      await this.letterboxdService.fetchUpdates();
+      await this.integrationModel.updateOne(
+        { integration: 'letterboxd' },
+        { status: 'ok', lastSync: new Date() },
+      );
+    } catch (e) {
+      this.logger.error('Letterboxd', e);
+      await this.integrationModel.updateOne(
+        { integration: 'letterboxd' },
+        { status: 'error' },
+      );
+    }
+  }
+
+  @Cron(CronExpression.EVERY_30_MINUTES)
+  async updateLastfm() {
+    // this.logger.log('Updating lastfm');
+    try {
+      await this.lastfmService.fetchUpdates();
+      await this.integrationModel.updateOne(
+        { integration: 'lastfm' },
+        { status: 'ok', lastSync: new Date() },
+      );
+    } catch (e) {
+      this.logger.error('Lastfm', e);
+      await this.integrationModel.updateOne(
+        { integration: 'lastfm' },
+        { status: 'error' },
+      );
+    }
+  }
+
+  @Cron(CronExpression.EVERY_30_MINUTES)
+  async updateRA() {
+    // this.logger.log('Updating RA');
+    try {
+      await this.retroachievementsService.fetchUpdates();
+      await this.integrationModel.updateOne(
+        { integration: 'retroachievements' },
+        { status: 'ok', lastSync: new Date() },
+      );
+    } catch (e) {
+      this.logger.error('RA', e);
+      await this.integrationModel.updateOne(
+        { integration: 'retroachievements' },
+        { status: 'error' },
+      );
+    }
+  }
+
+  @Cron(CronExpression.EVERY_3_HOURS)
+  async updateHassGps() {
+    // this.logger.log('Updating HASS GPS');
+    try {
+      await this.homeassistantGpsService.fetchUpdates();
+      await this.integrationModel.updateOne(
+        { integration: 'hass' },
+        { status: 'ok', lastSync: new Date() },
+      );
+    } catch (e) {
+      this.logger.error('HASS', e);
+      await this.integrationModel.updateOne(
+        { integration: 'hass' },
+        { status: 'error' },
+      );
+    }
+  }
+
+  @Cron(CronExpression.EVERY_3_HOURS)
+  async updateWttr() {
+    // this.logger.log('Updating wttr');
+    try {
+      await this.wttrService.fetchUpdates();
+      await this.integrationModel.updateOne(
+        { integration: 'wttr' },
+        { status: 'ok', lastSync: new Date() },
+      );
+    } catch (e) {
+      this.logger.error('Wttr', e);
+      await this.integrationModel.updateOne(
+        { integration: 'wttr' },
+        { status: 'error' },
+      );
+    }
+  }
+}
