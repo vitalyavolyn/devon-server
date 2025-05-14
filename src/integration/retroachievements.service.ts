@@ -35,6 +35,7 @@ export class RetroachievementsService {
       title: achievement.Title,
       gameUrl: BASE_URL + achievement.GameURL,
       isHardcore: Boolean(achievement.HardcoreMode),
+      points: achievement.Points,
     };
   }
 

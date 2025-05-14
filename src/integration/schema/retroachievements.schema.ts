@@ -26,6 +26,9 @@ export class Retroachievements {
 
   @Prop()
   isHardcore: boolean;
+
+  @Prop()
+  points: number;
 }
 
 export const RetroachievementsSchema =
