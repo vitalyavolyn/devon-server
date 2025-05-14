@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { HttpService } from '@nestjs/axios';
@@ -137,6 +136,7 @@ export class HomeassistantGpsService {
     if (currentLocation && currentLocation.date >= doc.date) {
       this.logger.log('Current location is newer, skipping updating it');
     } else {
+      await this.locationModel.deleteMany({});
       await this.locationModel.insertOne(doc);
       this.logger.log(`Updated location from HASS`);
     }
