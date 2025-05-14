@@ -35,6 +35,16 @@ export class MyshowsService {
     @InjectModel(Integration.name) private integrationModel: Model<Integration>,
   ) {}
 
+  getLatest() {
+    return this.myshowsModel.findOne({}, null, { sort: { watchedDate: -1 } });
+  }
+
+  public async getRange(start: Date, end: Date): Promise<any[]> {
+    return await this.myshowsModel.find({
+      watchedDate: { $gte: start, $lt: end },
+    });
+  }
+
   private async getTokenByPassword(
     login: string,
     password: string,

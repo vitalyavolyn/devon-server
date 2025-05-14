@@ -27,6 +27,18 @@ export class LetterboxdService {
     @InjectModel(Integration.name) private integrationModel: Model<Integration>,
   ) {}
 
+  getLatest() {
+    return this.letterboxdModel.findOne({}, null, {
+      sort: { watchedDate: -1 },
+    });
+  }
+
+  public async getRange(start: Date, end: Date): Promise<any[]> {
+    return await this.letterboxdModel.find({
+      watchedDate: { $gte: start, $lt: end },
+    });
+  }
+
   async init([login, exportPath]: [string, string]): Promise<void> {
     if (!login || !exportPath) {
       throw new Error(

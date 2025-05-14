@@ -25,6 +25,12 @@ export class WttrService {
     @InjectModel(Integration.name) private integrationModel: Model<Integration>,
   ) {}
 
+  public getToday() {
+    return this.wttrModel.findOne({
+      date: new Date().toLocaleDateString('en-CA'),
+    });
+  }
+
   private processSingleDay(report): Partial<Wttr> {
     return {
       minTempC: report.mintempC,
@@ -34,10 +40,13 @@ export class WttrService {
   }
 
   private wttrToDocuments(state: any): Wttr[] {
-    const area = state.nearest_area[0]?.areaName?.[0].value;
+    const area = state.nearest_area[0];
     return state.weather.map((report) => ({
       ...this.processSingleDay(report),
-      areaName: area,
+      areaName: area?.areaName?.[0].value,
+      areaCountry: area?.country?.[0].value,
+      areaLatitude: area.latitude,
+      areaLongitude: area.longitude,
     })) as Wttr[];
   }
 

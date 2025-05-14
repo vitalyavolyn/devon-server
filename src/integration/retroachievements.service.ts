@@ -27,6 +27,12 @@ export class RetroachievementsService {
     @InjectModel(Integration.name) private integrationModel: Model<Integration>,
   ) {}
 
+  public async getRange(start: Date, end: Date): Promise<any[]> {
+    return await this.retroachievementsModel.find({
+      date: { $gte: start, $lt: end },
+    });
+  }
+
   private achievementToDocument(achievement: any): Retroachievements {
     return {
       image: BASE_URL + achievement.BadgeURL,
@@ -36,6 +42,7 @@ export class RetroachievementsService {
       gameUrl: BASE_URL + achievement.GameURL,
       isHardcore: Boolean(achievement.HardcoreMode),
       points: achievement.Points,
+      game: achievement.GameTitle,
     };
   }
 

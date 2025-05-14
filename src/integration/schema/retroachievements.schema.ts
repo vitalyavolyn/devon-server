@@ -16,6 +16,9 @@ export class Retroachievements {
   title: string;
 
   @Prop()
+  game: string;
+
+  @Prop()
   description: string;
 
   @Prop()

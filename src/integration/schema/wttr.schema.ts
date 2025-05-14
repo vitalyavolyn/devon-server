@@ -20,6 +20,15 @@ export class Wttr {
 
   @Prop()
   areaName: string;
+
+  @Prop()
+  areaCountry: string;
+
+  @Prop()
+  areaLatitude: number;
+
+  @Prop()
+  areaLongitude: number;
 }
 
 export const WttrSchema = SchemaFactory.createForClass(Wttr);

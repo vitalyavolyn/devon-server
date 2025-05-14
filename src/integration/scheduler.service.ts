@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { MyshowsService } from './myshows.service';
 import { InjectModel } from '@nestjs/mongoose';
@@ -13,7 +13,8 @@ import { WakatimeService } from './wakatime.service';
 
 @Injectable()
 // TODO: refactor
-export class SchedulerService {
+// TODO: a method to force trigger all scheduled tasks
+export class SchedulerService implements OnApplicationBootstrap {
   private readonly logger = new Logger(SchedulerService.name);
 
   constructor(
@@ -26,6 +27,18 @@ export class SchedulerService {
     private readonly wakatimeService: WakatimeService,
     @InjectModel(Integration.name) private integrationModel: Model<Integration>,
   ) {}
+
+  async onApplicationBootstrap() {
+    // await Promise.all([
+    //   this.updateMyshows(),
+    //   this.updateLetterboxd(),
+    //   this.updateLastfm(),
+    //   this.updateRA(),
+    //   this.updateHassGps(),
+    //   this.updateWttr(),
+    //   this.updateWakatime(),
+    // ]);
+  }
 
   @Cron(CronExpression.EVERY_30_MINUTES)
   async updateMyshows() {

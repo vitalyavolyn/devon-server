@@ -25,6 +25,18 @@ export class LastfmService {
     @InjectModel(Integration.name) private integrationModel: Model<Integration>,
   ) {}
 
+  public async getRange(start: Date, end: Date): Promise<any[]> {
+    return await this.lastfmModel.find({
+      scrobbledAt: { $gte: start, $lt: end },
+    });
+  }
+
+  public async getToday() {
+    return this.lastfmModel.countDocuments({
+      scrobbledAt: new Date().toLocaleDateString('en-CA'),
+    });
+  }
+
   private recentTrackToDocument(track: any): Lastfm | null {
     if (track['@attr']?.nowplaying) return null;
 

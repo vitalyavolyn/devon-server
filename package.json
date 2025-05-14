@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@date-fns/tz": "^1.2.0",
     "@nestjs/axios": "^4.0.0",
     "@nestjs/common": "^11.1.0",
     "@nestjs/core": "^11.1.0",
@@ -28,7 +29,10 @@
     "@nestjs/schedule": "^6.0.0",
     "axios": "^1.9.0",
     "cheerio": "^1.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
     "csv": "^6.3.11",
+    "date-fns": "^4.1.0",
     "mongoose": "^8.14.2",
     "nest-commander": "^3.17.0",
     "reflect-metadata": "^0.2.2",

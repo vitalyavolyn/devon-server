@@ -25,6 +25,28 @@ export class WakatimeService {
     @InjectModel(Integration.name) private integrationModel: Model<Integration>,
   ) {}
 
+  public async getRange(start: Date, end: Date): Promise<any[]> {
+    // return await this.wakatimeModel.find({
+    //   date: { $gte: start, $lt: end },
+    // });
+
+    return await this.wakatimeModel.aggregate([
+      {
+        $match: {
+          date: { $gte: start, $lt: end },
+        },
+      },
+      {
+        $group: {
+          _id: '$project',
+          duration: {
+            $sum: '$duration',
+          },
+        },
+      },
+    ]);
+  }
+
   private rawDataToRecord(duration: any): Wakatime {
     return {
       duration: duration.duration,
