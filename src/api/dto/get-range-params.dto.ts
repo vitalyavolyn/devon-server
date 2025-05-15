@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { IsDateString, IsNumber, IsOptional } from 'class-validator';
 
 export class GetRangeParamsDto {

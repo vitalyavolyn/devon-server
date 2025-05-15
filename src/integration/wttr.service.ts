@@ -16,7 +16,7 @@ import { Wttr } from './schema/wttr.schema';
 export class WttrService {
   private readonly logger = new Logger(WttrService.name);
 
-  constructor(
+  public constructor(
     private readonly httpService: HttpService,
     @InjectModel(Location.name)
     private readonly locationModel: Model<Location>,
@@ -60,7 +60,7 @@ export class WttrService {
     return stateResponse.data;
   }
 
-  async fetchUpdates() {
+  public async fetchUpdates() {
     const integrationInfo = await this.integrationModel.findOne({
       integration: 'wttr',
     });

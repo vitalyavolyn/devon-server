@@ -18,7 +18,7 @@ const CONFIG_API_KEY = 'lastfm_api_key';
 export class LastfmService {
   private readonly logger = new Logger(LastfmService.name);
 
-  constructor(
+  public constructor(
     private readonly httpService: HttpService,
     @InjectModel(Lastfm.name) private lastfmModel: Model<Lastfm>,
     @InjectModel(Config.name) private configModel: Model<Config>,
@@ -49,7 +49,7 @@ export class LastfmService {
     };
   }
 
-  async init([login, apiKey]: [string, string]): Promise<void> {
+  public async init([login, apiKey]: [string, string]): Promise<void> {
     if (!login || !apiKey) {
       throw new Error('Usage: init lastfm {login} {api key}');
     }
@@ -116,7 +116,7 @@ export class LastfmService {
     );
   }
 
-  async fetchUpdates() {
+  public async fetchUpdates() {
     const integrationInfo = await this.integrationModel.findOne({
       integration: 'lastfm',
     });

@@ -4,11 +4,13 @@ import { SamsungHealthImporter } from './importers/samsung-health.importer';
 
 @Command({ name: 'import', description: 'Import historical data' })
 export class ImportCommand extends CommandRunner {
-  constructor(private readonly samsungHealthImporter: SamsungHealthImporter) {
+  public constructor(
+    private readonly samsungHealthImporter: SamsungHealthImporter,
+  ) {
     super();
   }
 
-  getService(serviceName: string): Importable | null {
+  private getService(serviceName: string): Importable | null {
     switch (serviceName) {
       case 'samsung':
         return this.samsungHealthImporter;
@@ -17,7 +19,7 @@ export class ImportCommand extends CommandRunner {
     }
   }
 
-  async run(passedParams: string[]): Promise<void> {
+  public async run(passedParams: string[]): Promise<void> {
     const serviceName = passedParams[0];
 
     if (!serviceName) {

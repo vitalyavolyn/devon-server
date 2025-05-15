@@ -10,6 +10,7 @@ import { RetroachievementsService } from './retroachievements.service';
 import { HomeassistantGpsService } from './homeassistant-gps.service';
 import { WttrService } from './wttr.service';
 import { WakatimeService } from './wakatime.service';
+import { BotHandler } from 'src/bot/bot.handler';
 
 @Injectable()
 // TODO: refactor
@@ -17,7 +18,7 @@ import { WakatimeService } from './wakatime.service';
 export class SchedulerService implements OnApplicationBootstrap {
   private readonly logger = new Logger(SchedulerService.name);
 
-  constructor(
+  public constructor(
     private readonly myshowsService: MyshowsService,
     private readonly letterboxdService: LetterboxdService,
     private readonly lastfmService: LastfmService,
@@ -26,9 +27,10 @@ export class SchedulerService implements OnApplicationBootstrap {
     private readonly wttrService: WttrService,
     private readonly wakatimeService: WakatimeService,
     @InjectModel(Integration.name) private integrationModel: Model<Integration>,
+    private readonly botHandler: BotHandler,
   ) {}
 
-  async onApplicationBootstrap() {
+  public async onApplicationBootstrap() {
     // await Promise.all([
     //   this.updateMyshows(),
     //   this.updateLetterboxd(),
@@ -41,7 +43,7 @@ export class SchedulerService implements OnApplicationBootstrap {
   }
 
   @Cron(CronExpression.EVERY_30_MINUTES)
-  async updateMyshows() {
+  private async updateMyshows() {
     // this.logger.log('Updating myshows episodes');
     try {
       await this.myshowsService.fetchUpdates();
@@ -59,7 +61,7 @@ export class SchedulerService implements OnApplicationBootstrap {
   }
 
   @Cron(CronExpression.EVERY_10_MINUTES)
-  async updateLetterboxd() {
+  private async updateLetterboxd() {
     // this.logger.log('Updating letterboxd');
     try {
       await this.letterboxdService.fetchUpdates();
@@ -77,7 +79,7 @@ export class SchedulerService implements OnApplicationBootstrap {
   }
 
   @Cron(CronExpression.EVERY_30_MINUTES)
-  async updateLastfm() {
+  private async updateLastfm() {
     // this.logger.log('Updating lastfm');
     try {
       await this.lastfmService.fetchUpdates();
@@ -95,7 +97,7 @@ export class SchedulerService implements OnApplicationBootstrap {
   }
 
   @Cron(CronExpression.EVERY_30_MINUTES)
-  async updateRA() {
+  private async updateRA() {
     // this.logger.log('Updating RA');
     try {
       await this.retroachievementsService.fetchUpdates();
@@ -113,7 +115,7 @@ export class SchedulerService implements OnApplicationBootstrap {
   }
 
   @Cron(CronExpression.EVERY_3_HOURS)
-  async updateHassGps() {
+  private async updateHassGps() {
     // this.logger.log('Updating HASS GPS');
     try {
       await this.homeassistantGpsService.fetchUpdates();
@@ -131,7 +133,7 @@ export class SchedulerService implements OnApplicationBootstrap {
   }
 
   @Cron(CronExpression.EVERY_3_HOURS)
-  async updateWttr() {
+  private async updateWttr() {
     // this.logger.log('Updating wttr');
     try {
       await this.wttrService.fetchUpdates();
@@ -149,7 +151,7 @@ export class SchedulerService implements OnApplicationBootstrap {
   }
 
   @Cron(CronExpression.EVERY_30_MINUTES)
-  async updateWakatime() {
+  private async updateWakatime() {
     // this.logger.log('Updating wakatime');
     try {
       await this.wakatimeService.fetchUpdates();
@@ -164,5 +166,10 @@ export class SchedulerService implements OnApplicationBootstrap {
         { status: 'error' },
       );
     }
+  }
+
+  @Cron(CronExpression.EVERY_MINUTE)
+  private async sendTelegtamReminders() {
+    await this.botHandler.sendReminders();
   }
 }

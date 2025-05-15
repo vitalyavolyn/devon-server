@@ -9,10 +9,10 @@ import { parse } from 'csv';
 export class SamsungHealthImporter {
   private readonly logger = new Logger(SamsungHealthImporter.name);
 
-  constructor() {}
+  public constructor() {}
 
   // eslint-disable-next-line @typescript-eslint/require-await
-  async import([path]: [string]): Promise<void> {
+  public async import([path]: [string]): Promise<void> {
     if (!path) {
       throw new Error(
         'Usage: import samsung {path to com.samsung.shealth.sleep.csv}',

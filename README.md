@@ -26,6 +26,10 @@ Sample .env:
 ```
 DB_URI=mongodb://localhost/devon
 PORT=3000
+
+# Telegram is the one thing that isn't stored in the configs collection. I'm fine with this.
+TELEGRAM_TOKEN=
+TELEGRAM_CHAT_ID=
 ```
 
 Initialize integrations:

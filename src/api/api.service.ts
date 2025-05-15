@@ -12,7 +12,6 @@ import {
 import { WttrDocument } from 'src/integration/schema/wttr.schema';
 import { tz } from '@date-fns/tz';
 import { LastfmDocument } from 'src/integration/schema/lastfm.schema';
-import { HomeassistantGpsService } from 'src/integration/homeassistant-gps.service';
 import { LastfmService } from 'src/integration/lastfm.service';
 import { LetterboxdService } from 'src/integration/letterboxd.service';
 import { MyshowsService } from 'src/integration/myshows.service';
@@ -20,12 +19,10 @@ import { RetroachievementsService } from 'src/integration/retroachievements.serv
 import { WakatimeService } from 'src/integration/wakatime.service';
 import { LetterboxdDocument } from 'src/integration/schema/letterboxd.schema';
 import { MyshowsDocument } from 'src/integration/schema/myshows.schema';
-import {
-  Retroachievements,
-  RetroachievementsDocument,
-} from 'src/integration/schema/retroachievements.schema';
+import { RetroachievementsDocument } from 'src/integration/schema/retroachievements.schema';
 import { WakatimeDocument } from 'src/integration/schema/wakatime.schema';
 import { WttrService } from 'src/integration/wttr.service';
+import { BotDataService } from 'src/bot/bot-data.service';
 
 // TODO: move to types
 // TODO: organize props
@@ -86,22 +83,26 @@ const TIMEZONE = 'Asia/Oral';
 
 @Injectable()
 export class ApiService {
-  constructor(
+  public constructor(
     private readonly myshowsService: MyshowsService,
     private readonly letterboxdService: LetterboxdService,
     private readonly lastfmService: LastfmService,
     private readonly retroachievementsService: RetroachievementsService,
     private readonly wakatimeService: WakatimeService,
     private readonly wttrService: WttrService,
+    private readonly botDataService: BotDataService,
   ) {}
 
-  getHello(): string {
+  public getHello(): string {
     return 'Hello World!';
   }
 
   // TODO: refactor
   // TODO: links
-  async getMusicActivities(start: Date, end: Date): Promise<MusicActivity[]> {
+  private async getMusicActivities(
+    start: Date,
+    end: Date,
+  ): Promise<MusicActivity[]> {
     const records = (await this.lastfmService.getRange(
       start,
       end,
@@ -117,7 +118,10 @@ export class ApiService {
     }));
   }
 
-  async getMovieActivities(start: Date, end: Date): Promise<MovieActivity[]> {
+  private async getMovieActivities(
+    start: Date,
+    end: Date,
+  ): Promise<MovieActivity[]> {
     const records = (await this.letterboxdService.getRange(
       start,
       end,
@@ -136,7 +140,7 @@ export class ApiService {
     }));
   }
 
-  async getTvActivities(start: Date, end: Date): Promise<TvActivity[]> {
+  private async getTvActivities(start: Date, end: Date): Promise<TvActivity[]> {
     const records = (await this.myshowsService.getRange(
       start,
       end,
@@ -152,7 +156,7 @@ export class ApiService {
     }));
   }
 
-  async getAchievementActivities(
+  private async getAchievementActivities(
     start: Date,
     end: Date,
   ): Promise<AchievementActivity[]> {
@@ -174,7 +178,10 @@ export class ApiService {
     }));
   }
 
-  async getCodingActivities(start: Date, end: Date): Promise<CodeActivity[]> {
+  private async getCodingActivities(
+    start: Date,
+    end: Date,
+  ): Promise<CodeActivity[]> {
     const records = (await this.wakatimeService.getRange(
       start,
       end,
@@ -189,7 +196,7 @@ export class ApiService {
     }));
   }
 
-  async generateDayData(date: Date): Promise<Day> {
+  private async generateDayData(date: Date): Promise<Day> {
     const start = startOfDay(date, { in: tz(TIMEZONE) });
     const end = endOfDay(date, { in: tz(TIMEZONE) });
 
@@ -210,7 +217,7 @@ export class ApiService {
     };
   }
 
-  async getRange(params: GetRangeParamsDto) {
+  public async getRange(params: GetRangeParamsDto) {
     const today = new Date();
     const { startDate, endDate, limit } = params;
 
@@ -261,12 +268,13 @@ export class ApiService {
     return result;
   }
 
-  async getToday() {
+  public async getToday() {
     return {
       wttr: await this.wttrService.getToday(),
       lastfm: await this.lastfmService.getToday(),
       letterboxd: await this.letterboxdService.getLatest(),
       myshows: await this.myshowsService.getLatest(),
+      ...(await this.botDataService.getToday()),
     };
   }
 }

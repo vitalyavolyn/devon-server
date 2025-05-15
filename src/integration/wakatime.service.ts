@@ -17,7 +17,7 @@ const CONFIG_API_KEY = 'wakatime_api_key';
 export class WakatimeService {
   private readonly logger = new Logger(WakatimeService.name);
 
-  constructor(
+  public constructor(
     private readonly httpService: HttpService,
     @InjectModel(Wakatime.name)
     private wakatimeModel: Model<Wakatime>,
@@ -55,7 +55,7 @@ export class WakatimeService {
     };
   }
 
-  async init([apiKey]: [string, string]): Promise<void> {
+  public async init([apiKey]: [string, string]): Promise<void> {
     if (!apiKey) {
       throw new Error('Usage: init wakatime {api key}');
     }
@@ -105,7 +105,7 @@ export class WakatimeService {
     ) as Wakatime[];
   }
 
-  async fetchUpdates() {
+  public async fetchUpdates() {
     const integrationInfo = await this.integrationModel.findOne({
       integration: 'wakatime',
     });

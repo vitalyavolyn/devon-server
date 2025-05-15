@@ -20,14 +20,14 @@ const CONFIG_USERNAME_KEY = 'letterboxd_username';
 export class LetterboxdService {
   private readonly logger = new Logger(LetterboxdService.name);
 
-  constructor(
+  public constructor(
     private readonly httpService: HttpService,
     @InjectModel(Letterboxd.name) private letterboxdModel: Model<Letterboxd>,
     @InjectModel(Config.name) private configModel: Model<Config>,
     @InjectModel(Integration.name) private integrationModel: Model<Integration>,
   ) {}
 
-  getLatest() {
+  public getLatest() {
     return this.letterboxdModel.findOne({}, null, {
       sort: { watchedDate: -1 },
     });
@@ -39,7 +39,7 @@ export class LetterboxdService {
     });
   }
 
-  async init([login, exportPath]: [string, string]): Promise<void> {
+  public async init([login, exportPath]: [string, string]): Promise<void> {
     if (!login || !exportPath) {
       throw new Error(
         'Usage: init letterboxd {login} {path to the export folder}',
@@ -104,7 +104,7 @@ export class LetterboxdService {
     );
   }
 
-  async fetchUpdates() {
+  public async fetchUpdates() {
     const integrationInfo = await this.integrationModel.findOne({
       integration: 'letterboxd',
     });

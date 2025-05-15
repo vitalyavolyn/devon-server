@@ -9,7 +9,7 @@ import { WakatimeService } from '../integration/wakatime.service';
 
 @Command({ name: 'init', description: 'Run initial integration setup' })
 export class InitCommand extends CommandRunner {
-  constructor(
+  public constructor(
     private readonly myshowsService: MyshowsService,
     private readonly letterboxdService: LetterboxdService,
     private readonly lastfmService: LastfmService,
@@ -20,7 +20,7 @@ export class InitCommand extends CommandRunner {
     super();
   }
 
-  getService(serviceName: string): Initable | null {
+  private getService(serviceName: string): Initable | null {
     switch (serviceName) {
       case 'myshows':
         return this.myshowsService;
@@ -41,7 +41,7 @@ export class InitCommand extends CommandRunner {
     }
   }
 
-  async run(passedParams: string[]): Promise<void> {
+  public async run(passedParams: string[]): Promise<void> {
     const serviceName = passedParams[0];
 
     if (!serviceName) {

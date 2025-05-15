@@ -28,14 +28,14 @@ interface TokenInfo {
 export class MyshowsService {
   private readonly logger = new Logger(MyshowsService.name);
 
-  constructor(
+  public constructor(
     private readonly httpService: HttpService,
     @InjectModel(Myshows.name) private myshowsModel: Model<Myshows>,
     @InjectModel(Config.name) private configModel: Model<Config>,
     @InjectModel(Integration.name) private integrationModel: Model<Integration>,
   ) {}
 
-  getLatest() {
+  public getLatest() {
     return this.myshowsModel.findOne({}, null, { sort: { watchedDate: -1 } });
   }
 
@@ -112,7 +112,7 @@ export class MyshowsService {
     };
   }
 
-  async init([login, password]: [string, string]): Promise<void> {
+  public async init([login, password]: [string, string]): Promise<void> {
     if (!login || !password) {
       throw new Error('Usage: init myshows {login} {password}');
     }
@@ -218,7 +218,7 @@ export class MyshowsService {
     );
   }
 
-  async fetchUpdates() {
+  public async fetchUpdates() {
     const integrationInfo = await this.integrationModel.findOne({
       integration: 'myshows',
     });

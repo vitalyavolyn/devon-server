@@ -19,7 +19,7 @@ const CONFIG_API_KEY = 'retroachievements_api_key';
 export class RetroachievementsService {
   private readonly logger = new Logger(RetroachievementsService.name);
 
-  constructor(
+  public constructor(
     private readonly httpService: HttpService,
     @InjectModel(Retroachievements.name)
     private retroachievementsModel: Model<Retroachievements>,
@@ -46,7 +46,7 @@ export class RetroachievementsService {
     };
   }
 
-  async init([ulid, apiKey]: [string, string]): Promise<void> {
+  public async init([ulid, apiKey]: [string, string]): Promise<void> {
     if (!ulid || !apiKey) {
       throw new Error('Usage: init retroachievements {ULID} {api key}');
     }
@@ -96,7 +96,7 @@ export class RetroachievementsService {
     );
   }
 
-  async fetchUpdates() {
+  public async fetchUpdates() {
     const integrationInfo = await this.integrationModel.findOne({
       integration: 'retroachievements',
     });

@@ -4,20 +4,20 @@ import { GetRangeParamsDto } from './dto/get-range-params.dto';
 
 @Controller()
 export class ApiController {
-  constructor(private readonly apiService: ApiService) {}
+  public constructor(private readonly apiService: ApiService) {}
 
   @Get()
-  getHello(): string {
+  public getHello(): string {
     return this.apiService.getHello();
   }
 
   @Get('getRange')
-  getRange(@Query() params: GetRangeParamsDto) {
+  public getRange(@Query() params: GetRangeParamsDto) {
     return this.apiService.getRange(params);
   }
 
   @Get('today')
-  getToday() {
+  public getToday() {
     return this.apiService.getToday();
   }
 }

@@ -4,6 +4,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ScheduleModule } from '@nestjs/schedule';
 import { IntegrationModule } from './integration/integration.module';
 import { ApiModule } from './api/api.module';
+import { BotModule } from './bot/bot.module';
+import { TelegrafModule } from 'nestjs-telegraf';
+import { createGuardMiddleware } from './bot/guard.middleware';
 
 @Module({
   imports: [
@@ -15,9 +18,20 @@ import { ApiModule } from './api/api.module';
       }),
       inject: [ConfigService],
     }),
+    TelegrafModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        token: configService.get<string>('TELEGRAM_TOKEN')!,
+        middlewares: [
+          createGuardMiddleware(configService.get<string>('TELEGRAM_CHAT_ID')!),
+        ],
+      }),
+      inject: [ConfigService],
+    }),
     ScheduleModule.forRoot(),
     IntegrationModule,
     ApiModule,
+    BotModule,
   ],
 })
 export class AppModule {}

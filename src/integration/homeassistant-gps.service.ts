@@ -20,7 +20,7 @@ const CONFIG_API_KEY = 'hass_api_key';
 export class HomeassistantGpsService {
   private readonly logger = new Logger(HomeassistantGpsService.name);
 
-  constructor(
+  public constructor(
     private readonly httpService: HttpService,
     @InjectModel(Location.name)
     private locationModel: Model<Location>,
@@ -49,7 +49,7 @@ export class HomeassistantGpsService {
     return stateResponse.data;
   }
 
-  async init([baseUrl, apiKey, deviceName]: [
+  public async init([baseUrl, apiKey, deviceName]: [
     string,
     string,
     string,
@@ -99,7 +99,7 @@ export class HomeassistantGpsService {
     );
   }
 
-  async fetchUpdates() {
+  public async fetchUpdates() {
     const integrationInfo = await this.integrationModel.findOne({
       integration: 'hass',
     });
