@@ -84,7 +84,9 @@ export class BotHandler {
     const [question] = this.questionQueue;
 
     if (!question) {
-      await ctx.reply('All done! ✨');
+      await ctx.reply('All done! ✨', {
+        reply_markup: { remove_keyboard: true },
+      });
       return;
     }
 
@@ -114,7 +116,7 @@ export class BotHandler {
       });
     }
 
-    if (question.type === 'text') {
+    if (question.type === 'text' || question.type === 'number') {
       await ctx.reply(question.question);
     }
   }
@@ -169,6 +171,16 @@ export class BotHandler {
     let answer: string = '';
     let numberValue: number | undefined;
     console.log(ctx);
+
+    if (question.type === 'number') {
+      //@ts-expect-error: checking if a string is a number
+      if (isNaN(ctx.update.message.text)) {
+        return 'Invalid number';
+      }
+
+      numberValue = Number(ctx.update.message.text);
+      answer = ctx.update.message.text;
+    }
 
     if (question.type === 'text') {
       if (question.regex && !question.regex.test(ctx.update.message.text)) {
