@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/mongoose';
-import { Ctx, Start, Hears, Update, InjectBot } from 'nestjs-telegraf';
+import { Ctx, Start, Hears, Update, InjectBot, Command } from 'nestjs-telegraf';
 import { Context, Markup, Telegraf } from 'telegraf';
 import { TelegramSurveyState } from './schema/telegram-survey-state.schema';
 import { Model } from 'mongoose';
@@ -126,6 +126,24 @@ export class BotHandler {
     await ctx.reply('Welcome');
   }
 
+  @Command('skip')
+  public async skip(@Ctx() ctx: Context) {
+    if (this.questionQueue.length === 0) return 'No survey is running,';
+
+    await ctx.reply('Skipping current question');
+    this.questionQueue.shift();
+    this.triggerNextQuestion(ctx);
+  }
+
+  @Command('cancel')
+  public async cancel(@Ctx() ctx: Context) {
+    if (this.questionQueue.length === 0) return 'No survey is running,';
+
+    await ctx.reply('Skipping the survey');
+    this.questionQueue.length = 0;
+    this.triggerNextQuestion(ctx);
+  }
+
   @Hears(/\/(\w+)/)
   public async startSurvey(@Ctx() ctx: MatchContext) {
     const surveyName = ctx.match[1];
@@ -146,8 +164,6 @@ export class BotHandler {
     );
     await this.triggerNextQuestion(ctx);
   }
-
-  // TODO: skip
 
   @Hears(/^([^/].*)$/)
   public async handleResponse(@Ctx() ctx: Context) {
