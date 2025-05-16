@@ -51,7 +51,7 @@ export class BotHandler {
         key: survey.key,
       });
 
-      if (!state) continue;
+      if (!state || state.reminderSent) continue;
 
       const differenceInHours = Math.abs(
         differenceInMinutes(state.lastRun, new Date()) / 60,
@@ -157,7 +157,7 @@ export class BotHandler {
     if (
       !('message' in ctx.update) ||
       !('text' in ctx.update.message) ||
-      question.type === 'header'
+      question?.type === 'header'
     )
       return;
 
@@ -170,7 +170,7 @@ export class BotHandler {
 
     let answer: string = '';
     let numberValue: number | undefined;
-    console.log(ctx);
+    // console.log(ctx);
 
     if (question.type === 'number') {
       //@ts-expect-error: checking if a string is a number
