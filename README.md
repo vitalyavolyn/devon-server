@@ -1,6 +1,6 @@
 ## Description
 
-Devon is my aggregator for tracking stuff.
+Devon is my aggregator for tracking stuff. Hugely inspired by [KrauseFx/FxLifeSheet](https://github.com/KrauseFx/FxLifeSheet)
 
 ## Project setup
 
@@ -54,3 +54,5 @@ $ yarn ts-node src/main.cli.ts init wakatime api-key
 # base url, access key and device name
 $ yarn ts-node src/main.cli.ts init hass https://hass.example.com long-lived-access-token device_tracker.my_iphone
 ```
+
+After location appears (via homeassistant, or, someday, telegram), devon also starts to pull wttr.in for min/max weather and nearest area name.
