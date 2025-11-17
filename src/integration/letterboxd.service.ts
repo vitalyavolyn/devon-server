@@ -56,35 +56,19 @@ export class LetterboxdService {
 
     // import movies
     const records: Letterboxd[] = [];
-    const watched = await readFile(join(exportPath, 'watched.csv'));
-    const watchedParser = parse(watched);
+    const diary = await readFile(join(exportPath, 'diary.csv'));
+    const diaryParser = parse(diary);
 
-    for await (const record of watchedParser) {
+    for await (const record of diaryParser) {
       if (record[0] === 'Date') continue;
       records.push({
-        watchedDate: record[0],
+        watchedDate: record[7],
         movieName: record[1],
         releasedYear: record[2],
         letterboxdUri: record[3],
-        rating: null,
-        rewatch: false,
+        rating: record[4],
+        rewatch: record[5] === 'Yes',
       });
-    }
-
-    const ratings = await readFile(join(exportPath, 'ratings.csv'));
-    const ratingsParser = parse(ratings);
-    for await (const rating of ratingsParser) {
-      if (rating[0] === 'Date') continue;
-      const watchedEntryIndex = records.findIndex(
-        (e) => e.letterboxdUri === rating[3],
-      );
-      const watchedEntry = records[watchedEntryIndex];
-      if (!watchedEntryIndex) throw new Error();
-      if (watchedEntry?.watchedDate !== rating[0]) {
-        // TODO: fuck. what about rewatches?
-      } else {
-        records[watchedEntryIndex].rating = Number(rating[4]);
-      }
     }
 
     for (const record of records) {
