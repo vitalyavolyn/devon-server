@@ -94,7 +94,7 @@ export class SchedulerService implements OnApplicationBootstrap {
     }
   }
 
-  @Cron(CronExpression.EVERY_30_MINUTES)
+  @Cron(CronExpression.EVERY_HOUR)
   private async updateRA() {
     // this.logger.log('Updating RA');
     try {
@@ -130,7 +130,7 @@ export class SchedulerService implements OnApplicationBootstrap {
     }
   }
 
-  @Cron(CronExpression.EVERY_3_HOURS)
+  @Cron(CronExpression.EVERY_HOUR)
   private async updateWttr() {
     // this.logger.log('Updating wttr');
     try {
