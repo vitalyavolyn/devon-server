@@ -1,6 +1,7 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiService } from './api.service';
 import { GetRangeParamsDto } from './dto/get-range-params.dto';
+import { ShortcutsBodyDto } from './dto/shortcuts-body.dto';
 
 @Controller()
 export class ApiController {
@@ -19,5 +20,10 @@ export class ApiController {
   @Get('today')
   public getToday() {
     return this.apiService.getToday();
+  }
+
+  @Post('shortcuts')
+  public shortcutsWebhook(@Body() body: ShortcutsBodyDto) {
+    return this.apiService.shortcutsWebhook(body);
   }
 }

@@ -23,6 +23,7 @@ import { RetroachievementsDocument } from 'src/integration/schema/retroachieveme
 import { WakatimeDocument } from 'src/integration/schema/wakatime.schema';
 import { WttrService } from 'src/integration/wttr.service';
 import { BotDataService } from 'src/bot/bot-data.service';
+import { ShortcutsBodyDto } from './dto/shortcuts-body.dto';
 
 // TODO: move to types
 // TODO: organize props
@@ -269,6 +270,7 @@ export class ApiService {
   }
 
   public async getToday() {
+    // TODO: i forgor why is there getLatest in "today"
     return {
       wttr: await this.wttrService.getToday(),
       lastfm: await this.lastfmService.getToday(),
@@ -276,5 +278,10 @@ export class ApiService {
       myshows: await this.myshowsService.getLatest(),
       ...(await this.botDataService.getToday()),
     };
+  }
+
+  public shortcutsWebhook(body: ShortcutsBodyDto): number {
+    console.log(body);
+    return 0;
   }
 }
