@@ -1,5 +1,6 @@
 {
   # TODO: tidy up
+  # TODO: i think this rebuilds a couple times for some reason
   description = "devon-service";
 
   inputs = {

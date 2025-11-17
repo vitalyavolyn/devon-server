@@ -11,6 +11,7 @@ import {
   TelegramAnswerSchema,
 } from './schema/telegram-answer.schema';
 import { BotDataService } from './bot-data.service';
+import { BotSchedulerService } from './bot-scheduler.service';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { BotDataService } from './bot-data.service';
     forwardRef(() => IntegrationModule),
   ],
   controllers: [],
-  providers: [BotHandler, BotDataService],
+  providers: [BotHandler, BotDataService, BotSchedulerService],
   exports: [BotDataService, BotHandler],
 })
 export class BotModule {}

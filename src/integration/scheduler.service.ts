@@ -10,7 +10,6 @@ import { RetroachievementsService } from './retroachievements.service';
 import { HomeassistantGpsService } from './homeassistant-gps.service';
 import { WttrService } from './wttr.service';
 import { WakatimeService } from './wakatime.service';
-import { BotHandler } from 'src/bot/bot.handler';
 
 @Injectable()
 // TODO: refactor
@@ -27,7 +26,6 @@ export class SchedulerService implements OnApplicationBootstrap {
     private readonly wttrService: WttrService,
     private readonly wakatimeService: WakatimeService,
     @InjectModel(Integration.name) private integrationModel: Model<Integration>,
-    private readonly botHandler: BotHandler,
   ) {}
 
   public async onApplicationBootstrap() {
@@ -166,10 +164,5 @@ export class SchedulerService implements OnApplicationBootstrap {
         { status: 'error' },
       );
     }
-  }
-
-  @Cron(CronExpression.EVERY_MINUTE)
-  private async sendTelegtamReminders() {
-    await this.botHandler.sendReminders();
   }
 }

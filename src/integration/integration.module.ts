@@ -18,7 +18,6 @@ import { WttrSchema } from './schema/wttr.schema';
 import { WttrService } from './wttr.service';
 import { WakatimeSchema } from './schema/wakatime.schema';
 import { WakatimeService } from './wakatime.service';
-import { BotModule } from 'src/bot/bot.module';
 
 @Module({
   imports: [
@@ -39,7 +38,6 @@ import { BotModule } from 'src/bot/bot.module';
       { name: 'Wttr', schema: WttrSchema },
       { name: 'Wakatime', schema: WakatimeSchema },
     ]),
-    BotModule,
   ],
   controllers: [],
   providers: [
