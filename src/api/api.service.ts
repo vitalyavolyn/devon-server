@@ -24,6 +24,7 @@ import { WakatimeDocument } from 'src/integration/schema/wakatime.schema';
 import { WttrService } from 'src/integration/wttr.service';
 import { BotDataService } from 'src/bot/bot-data.service';
 import { ShortcutsBodyDto } from './dto/shortcuts-body.dto';
+import { WordleService } from 'src/integration/wordle.service';
 
 // TODO: move to types
 // TODO: organize props
@@ -91,6 +92,7 @@ export class ApiService {
     private readonly retroachievementsService: RetroachievementsService,
     private readonly wakatimeService: WakatimeService,
     private readonly wttrService: WttrService,
+    private readonly wordleService: WordleService,
     private readonly botDataService: BotDataService,
   ) {}
 
@@ -276,10 +278,12 @@ export class ApiService {
       lastfm: await this.lastfmService.getToday(),
       letterboxd: await this.letterboxdService.getLatest(),
       myshows: await this.myshowsService.getLatest(),
+      wordle: await this.wordleService.getLatest(),
       ...(await this.botDataService.getToday()),
     };
   }
 
+  // TODO: prevent duplicate executions
   public async shortcutsWebhook(body: ShortcutsBodyDto) {
     await this.botDataService.saveShortcutsData(body);
     return 'ok';
