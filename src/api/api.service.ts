@@ -280,8 +280,8 @@ export class ApiService {
     };
   }
 
-  public shortcutsWebhook(body: ShortcutsBodyDto): number {
-    console.log(body);
-    return 0;
+  public async shortcutsWebhook(body: ShortcutsBodyDto) {
+    await this.botDataService.saveShortcutsData(body);
+    return 'ok';
   }
 }

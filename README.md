@@ -56,3 +56,5 @@ $ yarn ts-node src/main.cli.ts init hass https://hass.example.com long-lived-acc
 ```
 
 After location appears (via homeassistant, or, someday, telegram), devon also starts to pull wttr.in for min/max weather and nearest area name.
+
+I also use an Apple Shortcut on my phone once a day to track sleep time and daily steps.
