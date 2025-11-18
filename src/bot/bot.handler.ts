@@ -24,6 +24,7 @@ const defaultKeyboard = {
 @Update()
 // TODO: location in case hass dies
 // maybe send a reminder if location is not updated in a long time?
+// TODO: /asleep needs to use previous day after 12am
 export class BotHandler {
   private questionQueue: TelegramQuestion[] = [];
   private chatId = 0;

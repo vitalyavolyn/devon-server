@@ -42,7 +42,6 @@ export interface TelegramSurvey {
   questions: TelegramQuestion[];
 }
 
-// TODO: reminders in scheduler
 export const surveys: TelegramSurvey[] = [
   {
     reminder: 'every3hours',
@@ -76,19 +75,23 @@ export const surveys: TelegramSurvey[] = [
         question: 'How would you rate your quality of sleep?',
         type: 'range',
         buttons: {
-          '5': 'Excellent, feeling refreshed',
-          '4': 'Great, feeling good',
-          '3': 'Good, slighty above average',
-          '2': 'Solid, slightly tired',
-          '1': 'Tired, restless sleep',
-          '0': 'Miserable',
+          '5': 'excellent, feeling refreshed',
+          '4': 'great, feeling good',
+          '3': 'good, slighty above average',
+          '2': 'solid, slightly tired',
+          '1': 'tired, restless sleep',
+          '0': 'miserable',
         },
       },
+      // {
+      //   key: 'watchTimeAsleep',
+      //   question: 'How many hours asleep were you according to your Watch?',
+      //   type: 'text',
+      //   regex: /\d?\d:\d\d/,
+      // },
       {
-        key: 'watchTimeAsleep',
-        question: 'How many hours asleep were you according to your Watch?',
-        type: 'text',
-        regex: /\d?\d:\d\d/,
+        question: 'Remember to run the Shortcut on your Watch or phone!',
+        type: 'header',
       },
     ],
   },
@@ -140,11 +143,11 @@ export const surveys: TelegramSurvey[] = [
         question: 'Did you nap today?',
         type: 'boolean',
       },
-      {
-        key: 'dailySteps',
-        question: 'How many steps did you take according to Apple Health?',
-        type: 'number',
-      },
+      // {
+      //   key: 'dailySteps',
+      //   question: 'How many steps did you take according to Apple Health?',
+      //   type: 'number',
+      // },
     ],
   },
 ];

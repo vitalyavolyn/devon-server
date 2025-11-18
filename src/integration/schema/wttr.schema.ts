@@ -29,6 +29,9 @@ export class Wttr {
 
   @Prop()
   areaLongitude: number;
+
+  @Prop()
+  current: boolean;
 }
 
 export const WttrSchema = SchemaFactory.createForClass(Wttr);

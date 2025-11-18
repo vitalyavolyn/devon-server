@@ -41,13 +41,29 @@ export class WttrService {
 
   private wttrToDocuments(state: any): Wttr[] {
     const area = state.nearest_area[0];
-    return state.weather.map((report) => ({
-      ...this.processSingleDay(report),
+
+    // special doc for current temp
+    const currentTemp = state.current_condition[0].temp_C;
+    const currentWttr: Wttr = {
+      minTempC: currentTemp,
+      maxTempC: currentTemp,
+      date: new Date(),
       areaName: area?.areaName?.[0].value,
       areaCountry: area?.country?.[0].value,
       areaLatitude: area.latitude,
       areaLongitude: area.longitude,
-    })) as Wttr[];
+      current: true,
+    };
+
+    return state.weather
+      .map((report) => ({
+        ...this.processSingleDay(report),
+        areaName: area?.areaName?.[0].value,
+        areaCountry: area?.country?.[0].value,
+        areaLatitude: area.latitude,
+        areaLongitude: area.longitude,
+      }))
+      .concat([currentWttr]) as Wttr[];
   }
 
   private async getReports(latitude, longitude) {
@@ -78,6 +94,7 @@ export class WttrService {
     const docs = this.wttrToDocuments(reports);
 
     await this.wttrModel.deleteMany({ date: { $in: docs.map((e) => e.date) } });
+    await this.wttrModel.deleteMany({ current: true });
     await this.wttrModel.insertMany(docs);
 
     this.logger.log('Weather updated');
