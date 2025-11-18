@@ -18,6 +18,8 @@ import { WttrSchema } from './schema/wttr.schema';
 import { WttrService } from './wttr.service';
 import { WakatimeSchema } from './schema/wakatime.schema';
 import { WakatimeService } from './wakatime.service';
+import { WordleSchema } from './schema/wordle.schema';
+import { WordleService } from './wordle.service';
 
 @Module({
   imports: [
@@ -37,6 +39,7 @@ import { WakatimeService } from './wakatime.service';
       { name: 'Location', schema: LocationSchema },
       { name: 'Wttr', schema: WttrSchema },
       { name: 'Wakatime', schema: WakatimeSchema },
+      { name: 'Wordle', schema: WordleSchema },
     ]),
   ],
   controllers: [],
@@ -49,6 +52,7 @@ import { WakatimeService } from './wakatime.service';
     HomeassistantGpsService,
     WttrService,
     WakatimeService,
+    WordleService,
   ],
   exports: [
     MyshowsService,
@@ -58,6 +62,7 @@ import { WakatimeService } from './wakatime.service';
     HomeassistantGpsService,
     WttrService,
     WakatimeService,
+    WordleService,
   ],
 })
 export class IntegrationModule {}

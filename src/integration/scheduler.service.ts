@@ -10,6 +10,7 @@ import { RetroachievementsService } from './retroachievements.service';
 import { HomeassistantGpsService } from './homeassistant-gps.service';
 import { WttrService } from './wttr.service';
 import { WakatimeService } from './wakatime.service';
+import { WordleService } from './wordle.service';
 
 @Injectable()
 // TODO: refactor
@@ -25,6 +26,7 @@ export class SchedulerService implements OnApplicationBootstrap {
     private readonly homeassistantGpsService: HomeassistantGpsService,
     private readonly wttrService: WttrService,
     private readonly wakatimeService: WakatimeService,
+    private readonly wordleService: WordleService,
     @InjectModel(Integration.name) private integrationModel: Model<Integration>,
   ) {}
 
@@ -37,6 +39,7 @@ export class SchedulerService implements OnApplicationBootstrap {
       this.updateHassGps(),
       this.updateWttr(),
       this.updateWakatime(),
+      this.updateWordle(),
     ]);
   }
 
@@ -161,6 +164,24 @@ export class SchedulerService implements OnApplicationBootstrap {
       this.logger.error('Wakatime', e);
       await this.integrationModel.updateOne(
         { integration: 'wakatime' },
+        { status: 'error' },
+      );
+    }
+  }
+
+  @Cron(CronExpression.EVERY_HOUR)
+  private async updateWordle() {
+    // this.logger.log('Updating wordle');
+    try {
+      await this.wordleService.fetchUpdates();
+      await this.integrationModel.updateOne(
+        { integration: 'wordle' },
+        { status: 'ok', lastSync: new Date() },
+      );
+    } catch (e) {
+      this.logger.error('Wordle', e);
+      await this.integrationModel.updateOne(
+        { integration: 'wordle' },
         { status: 'error' },
       );
     }
