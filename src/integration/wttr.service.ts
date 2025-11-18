@@ -28,6 +28,13 @@ export class WttrService {
   public getToday() {
     return this.wttrModel.findOne({
       date: new Date().toLocaleDateString('en-CA'),
+      current: { $exists: false },
+    });
+  }
+
+  public getCurrent() {
+    return this.wttrModel.findOne({
+      current: true,
     });
   }
 

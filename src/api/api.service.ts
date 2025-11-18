@@ -274,7 +274,7 @@ export class ApiService {
   public async getToday() {
     // TODO: i forgor why is there getLatest in "today"
     return {
-      wttr: await this.wttrService.getToday(),
+      wttr: await this.wttrService.getCurrent(),
       lastfm: await this.lastfmService.getToday(),
       letterboxd: await this.letterboxdService.getLatest(),
       myshows: await this.myshowsService.getLatest(),
