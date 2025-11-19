@@ -23,9 +23,11 @@ export class WordleService {
   ) {}
 
   public async getLatest() {
-    const wordle = await this.wordleModel.findOne({}, null, {
-      sort: { date: -1 },
-    });
+    const wordle = await this.wordleModel
+      .findOne({}, null, {
+        sort: { date: -1 },
+      })
+      .lean();
 
     if (!wordle) {
       return null;
@@ -35,9 +37,11 @@ export class WordleService {
   }
 
   public async getRange(start: Date, end: Date): Promise<any[]> {
-    const wordles = await this.wordleModel.find({
-      date: { $gte: start, $lt: end },
-    });
+    const wordles = await this.wordleModel
+      .find({
+        date: { $gte: start, $lt: end },
+      })
+      .lean();
 
     return wordles.map((wordle) => ({
       ...wordle,
