@@ -145,7 +145,7 @@ export class BotHandler {
     this.triggerNextQuestion(ctx);
   }
 
-  @Hears(/\/(\w+)/)
+  @Hears(/^\/(\w+)/)
   public async startSurvey(@Ctx() ctx: MatchContext) {
     const surveyName = ctx.match[1];
     const survey = surveys.find((e) => e.key === surveyName);
