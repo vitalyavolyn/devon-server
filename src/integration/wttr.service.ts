@@ -76,7 +76,7 @@ export class WttrService {
   private async getReports(latitude, longitude) {
     const stateResponse = await firstValueFrom(
       this.httpService.get(`https://wttr.in/${latitude},${longitude}`, {
-        params: { format: 'j1', lang: 'en' },
+        params: { format: 'j2', lang: 'en' },
       }),
     );
 

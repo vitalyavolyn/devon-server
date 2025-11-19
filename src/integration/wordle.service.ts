@@ -193,8 +193,14 @@ export class WordleService {
       return;
     }
 
+    const latestGame = await this.getLatest();
+
     const gameState = await this.fetchLatest(cookieObj.value);
     if (gameState) {
+      if (latestGame && latestGame.day === gameState.day) {
+        return;
+      }
+
       this.logger.log('Got latest played game, saving');
       await this.wordleModel.create({
         date: new Date(),

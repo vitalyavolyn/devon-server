@@ -133,7 +133,7 @@ export class SchedulerService implements OnApplicationBootstrap {
     }
   }
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_30_MINUTES)
   private async updateWttr() {
     // this.logger.log('Updating wttr');
     try {
