@@ -139,6 +139,11 @@ export const surveys: TelegramSurvey[] = [
         },
       },
       {
+        key: 'gym',
+        question: 'Did you work out in a gym today?',
+        type: 'boolean',
+      },
+      {
         key: 'nap',
         question: 'Did you nap today?',
         type: 'boolean',
