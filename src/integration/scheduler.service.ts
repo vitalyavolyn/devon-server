@@ -31,16 +31,16 @@ export class SchedulerService implements OnApplicationBootstrap {
   ) {}
 
   public async onApplicationBootstrap() {
-    await Promise.all([
-      this.updateMyshows(),
-      this.updateLetterboxd(),
-      this.updateLastfm(),
-      this.updateRA(),
-      this.updateHassGps(),
-      this.updateWttr(),
-      this.updateWakatime(),
-      this.updateWordle(),
-    ]);
+    // await Promise.all([
+    //   this.updateMyshows(),
+    //   this.updateLetterboxd(),
+    //   this.updateLastfm(),
+    //   this.updateRA(),
+    //   this.updateHassGps(),
+    //   this.updateWttr(),
+    //   this.updateWakatime(),
+    //   this.updateWordle(),
+    // ]);
   }
 
   @Cron(CronExpression.EVERY_30_MINUTES)

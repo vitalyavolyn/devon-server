@@ -71,34 +71,42 @@ export class LastfmService {
     let count = 0;
 
     while (true) {
-      const recentTracksResponse = await firstValueFrom(
-        this.httpService.get('http://ws.audioscrobbler.com/2.0/', {
-          params: {
-            page,
-            api_key: apiKey,
-            method: 'user.getrecenttracks',
-            user: login,
-            format: 'json',
-            limit: 200,
-          },
-        }),
-      );
+      try {
+        const recentTracksResponse = await firstValueFrom(
+          this.httpService.get('http://ws.audioscrobbler.com/2.0/', {
+            params: {
+              page,
+              api_key: apiKey,
+              method: 'user.getrecenttracks',
+              user: login,
+              format: 'json',
+              limit: 200,
+            },
+          }),
+        );
 
-      if (recentTracksResponse.data.recenttracks.track.length === 0) {
-        break;
+        if (recentTracksResponse.data.recenttracks.track.length === 0) {
+          break;
+        }
+
+        console.log(recentTracksResponse.data.recenttracks.track);
+        const records = recentTracksResponse.data.recenttracks.track
+          .map((track) => this.recentTrackToDocument(track))
+          .filter(Boolean) as Lastfm[];
+
+        await this.lastfmModel.insertMany(records);
+        count += records.length;
+        console.log(
+          `Added ${count} out of ${recentTracksResponse.data.recenttracks['@attr'].total}`,
+        );
+        page++;
+      } catch (error) {
+        if (error?.response?.data?.error === 8) {
+          console.log('retrying');
+        } else {
+          throw error;
+        }
       }
-
-      console.log(recentTracksResponse.data.recenttracks.track);
-      const records = recentTracksResponse.data.recenttracks.track
-        .map((track) => this.recentTrackToDocument(track))
-        .filter(Boolean) as Lastfm[];
-
-      await this.lastfmModel.insertMany(records);
-      count += records.length;
-      console.log(
-        `Added ${count} out of ${recentTracksResponse.data.recenttracks['@attr'].total}`,
-      );
-      page++;
     }
 
     const records: Lastfm[] = [];
