@@ -122,7 +122,7 @@ export class LetterboxdService {
 
       if (date < integrationInfo.lastSync) continue;
 
-      const url = el.find('link').text().replace(`/${loginInfo.value}/`, ''); // janky. also another type of url
+      const url = el.find('link').text().replace(`${loginInfo.value}/`, ''); // janky. also another type of url
       const isRewatch = el.find('letterboxd\\:rewatch').text() === 'Yes';
       const movieName = el.find('letterboxd\\:filmTitle').text();
       const releasedYear = el.find('letterboxd\\:filmYear').text();
