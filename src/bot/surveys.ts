@@ -83,16 +83,16 @@ export const surveys: TelegramSurvey[] = [
           '0': 'miserable',
         },
       },
-      // {
-      //   key: 'watchTimeAsleep',
-      //   question: 'How many hours asleep were you according to your Watch?',
-      //   type: 'text',
-      //   regex: /\d?\d:\d\d/,
-      // },
       {
-        question: 'Remember to run the Shortcut on your Watch or phone!',
-        type: 'header',
+        key: 'watchTimeAsleep',
+        question: 'How many hours asleep were you according to your Watch?',
+        type: 'text',
+        regex: /\d?\d:\d\d/,
       },
+      // {
+      //   question: 'Remember to run the Shortcut on your Watch or phone!',
+      //   type: 'header',
+      // },
     ],
   },
   {
@@ -148,11 +148,11 @@ export const surveys: TelegramSurvey[] = [
         question: 'Did you nap today?',
         type: 'boolean',
       },
-      // {
-      //   key: 'dailySteps',
-      //   question: 'How many steps did you take according to Apple Health?',
-      //   type: 'number',
-      // },
+      {
+        key: 'dailySteps',
+        question: 'How many steps did you take according to your Watch?',
+        type: 'number',
+      },
     ],
   },
 ];
