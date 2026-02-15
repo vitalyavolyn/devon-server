@@ -48,6 +48,17 @@ export class WttrService {
 
   private wttrToDocuments(state: any): Wttr[] {
     const area = state.nearest_area[0];
+    let areaName = area?.areaName?.[0].value;
+    const areaCountry = area?.country?.[0].value;
+    let areaLatitude = area.latitude;
+    let areaLongitude = area.longitude;
+
+    // wttr started to send me into a lake for some reason
+    if (areaName === "Taldykol'" || areaName === 'Promyshlennyy') {
+      areaName = 'Astana';
+      areaLatitude = 51.181;
+      areaLongitude = 71.428;
+    }
 
     // special doc for current temp
     const currentTemp = state.current_condition[0].temp_C;
@@ -55,20 +66,20 @@ export class WttrService {
       minTempC: currentTemp,
       maxTempC: currentTemp,
       date: new Date(),
-      areaName: area?.areaName?.[0].value,
-      areaCountry: area?.country?.[0].value,
-      areaLatitude: area.latitude,
-      areaLongitude: area.longitude,
+      areaName,
+      areaCountry,
+      areaLatitude,
+      areaLongitude,
       current: true,
     };
 
     return state.weather
       .map((report) => ({
         ...this.processSingleDay(report),
-        areaName: area?.areaName?.[0].value,
-        areaCountry: area?.country?.[0].value,
-        areaLatitude: area.latitude,
-        areaLongitude: area.longitude,
+        areaName,
+        areaCountry,
+        areaLatitude,
+        areaLongitude,
       }))
       .concat([currentWttr]) as Wttr[];
   }
