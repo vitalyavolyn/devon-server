@@ -140,13 +140,21 @@ export class SchedulerService implements OnApplicationBootstrap {
       await this.wttrService.fetchUpdates();
       await this.integrationModel.updateOne(
         { integration: 'wttr' },
-        { status: 'ok', lastSync: new Date() },
+        {
+          $set: { status: 'ok', lastSync: new Date() },
+          $setOnInsert: { integration: 'wttr' },
+        },
+        { upsert: true },
       );
     } catch (e) {
       this.logger.error('Wttr', e);
       await this.integrationModel.updateOne(
         { integration: 'wttr' },
-        { status: 'error' },
+        {
+          $set: { status: 'error' },
+          $setOnInsert: { integration: 'wttr' },
+        },
+        { upsert: true },
       );
     }
   }
