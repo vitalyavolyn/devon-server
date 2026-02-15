@@ -3,13 +3,9 @@ import { HydratedDocument } from 'mongoose';
 
 export type WordleDocument = HydratedDocument<Wordle>;
 
-@Schema({
-  timeseries: {
-    timeField: 'date',
-  },
-})
+@Schema()
 export class Wordle {
-  @Prop()
+  @Prop({ index: true })
   date: Date;
 
   @Prop()

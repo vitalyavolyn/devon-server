@@ -3,13 +3,9 @@ import { HydratedDocument } from 'mongoose';
 
 export type RetroachievementsDocument = HydratedDocument<Retroachievements>;
 
-@Schema({
-  timeseries: {
-    timeField: 'date',
-  },
-})
+@Schema()
 export class Retroachievements {
-  @Prop()
+  @Prop({ index: true })
   date: Date;
 
   @Prop()

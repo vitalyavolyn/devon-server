@@ -3,13 +3,9 @@ import { HydratedDocument } from 'mongoose';
 
 export type WttrDocument = HydratedDocument<Wttr>;
 
-@Schema({
-  timeseries: {
-    timeField: 'date',
-  },
-})
+@Schema()
 export class Wttr {
-  @Prop()
+  @Prop({ index: true })
   date: Date;
 
   @Prop()

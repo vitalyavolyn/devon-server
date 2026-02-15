@@ -3,13 +3,9 @@ import { HydratedDocument } from 'mongoose';
 
 export type LastfmDocument = HydratedDocument<Lastfm>;
 
-@Schema({
-  timeseries: {
-    timeField: 'scrobbledAt',
-  },
-})
+@Schema()
 export class Lastfm {
-  @Prop()
+  @Prop({ index: true })
   scrobbledAt: Date;
 
   @Prop()

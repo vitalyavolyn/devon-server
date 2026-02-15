@@ -3,13 +3,9 @@ import { HydratedDocument } from 'mongoose';
 
 export type LetterboxdDocument = HydratedDocument<Letterboxd>;
 
-@Schema({
-  timeseries: {
-    timeField: 'watchedDate',
-  },
-})
+@Schema()
 export class Letterboxd {
-  @Prop()
+  @Prop({ index: true })
   watchedDate: Date;
 
   @Prop()

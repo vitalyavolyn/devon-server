@@ -3,13 +3,9 @@ import { HydratedDocument } from 'mongoose';
 
 export type WakatimeDocument = HydratedDocument<Wakatime>;
 
-@Schema({
-  timeseries: {
-    timeField: 'date',
-  },
-})
+@Schema()
 export class Wakatime {
-  @Prop()
+  @Prop({ index: true })
   date: Date;
 
   @Prop()

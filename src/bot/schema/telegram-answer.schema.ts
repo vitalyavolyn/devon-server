@@ -3,12 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 export type TelegramAnswerDocument = HydratedDocument<TelegramAnswer>;
 
-@Schema({
-  timeseries: {
-    timeField: 'date',
-    metaField: 'key',
-  },
-})
+@Schema()
 export class TelegramAnswer {
   @Prop()
   key: string;
@@ -19,7 +14,7 @@ export class TelegramAnswer {
   @Prop()
   numberValue?: number;
 
-  @Prop({ type: Date, default: Date.now })
+  @Prop({ type: Date, default: Date.now, index: true })
   date: Date;
 }
 

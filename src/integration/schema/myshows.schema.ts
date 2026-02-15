@@ -3,13 +3,9 @@ import { HydratedDocument } from 'mongoose';
 
 export type MyshowsDocument = HydratedDocument<Myshows>;
 
-@Schema({
-  timeseries: {
-    timeField: 'watchedDate',
-  },
-})
+@Schema()
 export class Myshows {
-  @Prop()
+  @Prop({ index: true })
   watchedDate: Date;
 
   @Prop()
