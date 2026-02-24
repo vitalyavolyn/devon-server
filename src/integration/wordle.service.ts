@@ -136,33 +136,47 @@ export class WordleService {
   }
 
   private async fetchLatest(cookie: string) {
-    const latestStateResponse = await firstValueFrom(
+    const today = new Date().toISOString().split('T')[0];
+
+    const wordleInfoResponse = await firstValueFrom(
       this.httpService.get(
-        'https://www.nytimes.com/svc/games/state/wordleV2/latest',
+        `https://www.nytimes.com/svc/wordle/v2/${today}.json`,
         { headers: { Cookie: cookie } },
       ),
     );
 
-    this.logger.log(latestStateResponse.data);
-    const printDate = latestStateResponse.data.print_date;
-    const { status, hardMode, boardState } = latestStateResponse.data.game_data;
+    const {
+      id: puzzleId,
+      solution,
+      days_since_launch: day,
+      print_date: printDate,
+    } = wordleInfoResponse.data as {
+      id: number;
+      solution: string;
+      days_since_launch: number;
+      print_date: string;
+    };
+
+    this.logger.log(wordleInfoResponse.data);
+
+    const latestStateResponse = await firstValueFrom(
+      this.httpService.get(
+        `https://www.nytimes.com/svc/games/state/wordleV2/latests?puzzle_ids=${puzzleId}`,
+        { headers: { Cookie: cookie } },
+      ),
+    );
+
+    const state = latestStateResponse.data.states?.[0];
+    if (!state) {
+      return null;
+    }
+
+    const { status, hardMode, boardState } = state.game_data;
 
     // TODO: not sure about losses!
     if (!['WIN', 'LOSS'].includes(status)) {
       return null;
     }
-
-    const wordleAnswer = await firstValueFrom(
-      this.httpService.get(
-        `https://www.nytimes.com/svc/wordle/v2/${printDate}.json`,
-        { headers: { Cookie: cookie } },
-      ),
-    );
-
-    const { solution, days_since_launch: day } = wordleAnswer.data as {
-      solution: string;
-      days_since_launch: number;
-    };
 
     return {
       shareText: boardState,
