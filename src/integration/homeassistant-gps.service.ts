@@ -12,8 +12,8 @@ import { firstValueFrom } from 'rxjs';
 import { Location } from './schema/location.schema';
 
 const CONFIG_BASE_URL = 'hass_base_url';
-const CONFIG_DEVICE_NAME = 'hass_device_name';
 const CONFIG_API_KEY = 'hass_api_key';
+const CONFIG_GEOCODE_SENSOR = 'hass_geocode_sensor';
 
 @Injectable()
 // TODO: save in a new method
@@ -32,14 +32,15 @@ export class HomeassistantGpsService {
     return {
       source: 'hass',
       date: new Date(state.last_updated),
-      latitude: state.attributes.latitude,
-      longitude: state.attributes.longitude,
+      latitude: Math.round(state.attributes.location[0] * 100) / 100,
+      longitude: Math.round(state.attributes.location[1] * 100) / 100,
+      town: state.attributes.locality ?? null,
     };
   }
 
-  private async getDeviceState(baseUrl, apiKey, deviceName) {
+  private async getDeviceState(baseUrl, apiKey, sensorName) {
     const stateResponse = await firstValueFrom(
-      this.httpService.get(baseUrl + '/api/states/' + deviceName, {
+      this.httpService.get(baseUrl + '/api/states/' + sensorName, {
         headers: {
           Authorization: `Bearer ${apiKey}`,
         },
@@ -49,20 +50,20 @@ export class HomeassistantGpsService {
     return stateResponse.data;
   }
 
-  public async init([baseUrl, apiKey, deviceName]: [
+  public async init([baseUrl, apiKey, geocodeSensor]: [
     string,
     string,
     string,
   ]): Promise<void> {
-    if (!baseUrl || !apiKey || !deviceName) {
+    if (!baseUrl || !apiKey || !geocodeSensor) {
       throw new Error(
-        'Usage: init hass {BASE URL} {long lived api key} {location device name}',
+        'Usage: init hass {BASE URL} {long lived api key} {geocode sensor name}',
       );
     }
 
     await this.configModel.deleteOne({ key: CONFIG_BASE_URL });
-    await this.configModel.deleteOne({ key: CONFIG_DEVICE_NAME });
     await this.configModel.deleteOne({ key: CONFIG_API_KEY });
+    await this.configModel.deleteOne({ key: CONFIG_GEOCODE_SENSOR });
 
     await this.configModel.insertOne({
       key: CONFIG_BASE_URL,
@@ -73,11 +74,11 @@ export class HomeassistantGpsService {
       value: apiKey,
     });
     await this.configModel.insertOne({
-      key: CONFIG_DEVICE_NAME,
-      value: deviceName,
+      key: CONFIG_GEOCODE_SENSOR,
+      value: geocodeSensor,
     });
 
-    const state = await this.getDeviceState(baseUrl, apiKey, deviceName);
+    const state = await this.getDeviceState(baseUrl, apiKey, geocodeSensor);
     const doc = this.stateToDocument(state);
 
     const currentLocation = await this.locationModel.findOne();
@@ -109,13 +110,13 @@ export class HomeassistantGpsService {
     const apiKeyInfo = await this.configModel.findOne({
       key: CONFIG_API_KEY,
     });
-    const deviceNameInfo = await this.configModel.findOne({
-      key: CONFIG_DEVICE_NAME,
+    const geocodeSensorInfo = await this.configModel.findOne({
+      key: CONFIG_GEOCODE_SENSOR,
     });
 
     if (
       !integrationInfo?.lastSync ||
-      !deviceNameInfo?.value ||
+      !geocodeSensorInfo?.value ||
       !apiKeyInfo?.value ||
       !baseUrlInfo?.value
     ) {
@@ -128,7 +129,7 @@ export class HomeassistantGpsService {
     const state = await this.getDeviceState(
       baseUrlInfo.value,
       apiKeyInfo.value,
-      deviceNameInfo.value,
+      geocodeSensorInfo.value,
     );
     const doc = this.stateToDocument(state);
 

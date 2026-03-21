@@ -16,6 +16,9 @@ export class Location {
 
   @Prop()
   longitude: number;
+
+  @Prop()
+  town: string;
 }
 
 export const LocationSchema = SchemaFactory.createForClass(Location);
