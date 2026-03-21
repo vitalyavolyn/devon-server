@@ -102,7 +102,6 @@ export class WttrService {
       location.latitude,
       location.longitude,
     );
-    console.log(reports)
     const docs = this.wttrToDocuments(reports, location);
 
     await this.wttrModel.deleteMany({ date: { $in: docs.map((e) => e.date) } });
