@@ -46,7 +46,7 @@ export class WttrService {
     };
   }
 
-  private wttrToDocuments(state: any): Wttr[] {
+  private wttrToDocuments({data: state}: any): Wttr[] {
     const area = state.nearest_area[0];
     let areaName = area?.areaName?.[0].value;
     const areaCountry = area?.country?.[0].value;
@@ -109,6 +109,7 @@ export class WttrService {
       location.latitude,
       location.longitude,
     );
+    console.log(reports)
     const docs = this.wttrToDocuments(reports);
 
     await this.wttrModel.deleteMany({ date: { $in: docs.map((e) => e.date) } });
