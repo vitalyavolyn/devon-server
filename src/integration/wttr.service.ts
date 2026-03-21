@@ -46,19 +46,12 @@ export class WttrService {
     };
   }
 
-  private wttrToDocuments({data: state}: any): Wttr[] {
+  private wttrToDocuments({data: state}: any, location: Location): Wttr[] {
     const area = state.nearest_area[0];
-    let areaName = area?.areaName?.[0].value;
+    const areaName = location.town ?? area?.areaName?.[0].value;
     const areaCountry = area?.country?.[0].value;
-    let areaLatitude = area.latitude;
-    let areaLongitude = area.longitude;
-
-    // wttr started to send me into a lake for some reason
-    if (areaName === "Taldykol'" || areaName === 'Promyshlennyy') {
-      areaName = 'Astana';
-      areaLatitude = 51.181;
-      areaLongitude = 71.428;
-    }
+    const areaLatitude = location.latitude;
+    const areaLongitude = location.longitude;
 
     // special doc for current temp
     const currentTemp = state.current_condition[0].temp_C;
@@ -109,8 +102,7 @@ export class WttrService {
       location.latitude,
       location.longitude,
     );
-    console.log(reports)
-    const docs = this.wttrToDocuments(reports);
+    const docs = this.wttrToDocuments(reports, location);
 
     await this.wttrModel.deleteMany({ date: { $in: docs.map((e) => e.date) } });
     await this.wttrModel.deleteMany({ current: true });
