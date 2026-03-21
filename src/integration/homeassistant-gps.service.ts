@@ -101,9 +101,6 @@ export class HomeassistantGpsService {
   }
 
   public async fetchUpdates() {
-    const integrationInfo = await this.integrationModel.findOne({
-      integration: 'hass',
-    });
     const baseUrlInfo = await this.configModel.findOne({
       key: CONFIG_BASE_URL,
     });
@@ -114,14 +111,9 @@ export class HomeassistantGpsService {
       key: CONFIG_GEOCODE_SENSOR,
     });
 
-    if (
-      !integrationInfo?.lastSync ||
-      !geocodeSensorInfo?.value ||
-      !apiKeyInfo?.value ||
-      !baseUrlInfo?.value
-    ) {
+    if (!geocodeSensorInfo?.value || !apiKeyInfo?.value || !baseUrlInfo?.value) {
       this.logger.error(
-        "Can't find api key or last sync date. May need to re-add integration",
+        "Can't find hass config. Run: init hass {url} {api_key} {geocode_sensor}",
       );
       return;
     }

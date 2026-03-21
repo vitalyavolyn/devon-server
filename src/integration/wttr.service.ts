@@ -46,7 +46,7 @@ export class WttrService {
     };
   }
 
-  private wttrToDocuments(state: any, location: Location): Wttr[] {
+  private wttrToDocuments({data: state}: any, location: Location): Wttr[] {
     const area = state.nearest_area[0];
     const areaName = location.town ?? area?.areaName?.[0].value;
     const areaCountry = area?.country?.[0].value;
