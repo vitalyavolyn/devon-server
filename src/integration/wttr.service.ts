@@ -46,12 +46,12 @@ export class WttrService {
     };
   }
 
-  private wttrToDocuments({data: state}: any, location: Location): Wttr[] {
+  private wttrToDocuments(state: any, location: Location): Wttr[] {
     const area = state.nearest_area[0];
     const areaName = location.town ?? area?.areaName?.[0].value;
     const areaCountry = area?.country?.[0].value;
-    const areaLatitude = area.latitude;
-    const areaLongitude = area.longitude;
+    const areaLatitude = location.latitude;
+    const areaLongitude = location.longitude;
 
     // special doc for current temp
     const currentTemp = state.current_condition[0].temp_C;
