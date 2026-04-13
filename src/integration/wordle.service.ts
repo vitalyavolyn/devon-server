@@ -173,8 +173,7 @@ export class WordleService {
 
     const { status, hardMode, boardState } = state.game_data;
 
-    // TODO: not sure about losses!
-    if (!['WIN', 'LOSS'].includes(status)) {
+    if (!['WIN', 'FAIL'].includes(status)) {
       return null;
     }
 
