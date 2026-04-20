@@ -53,11 +53,11 @@ $ yarn ts-node src/main.cli.ts init wakatime api-key
 # NYT Wordle (get cookies string by executing `document.cookie`)
 $ yarn ts-node src/main.cli.ts init wordle cookie
 
-# Homeassistant for updating location
-# base url, access key and geocoded location sensor name
-$ yarn ts-node src/main.cli.ts init hass https://hass.example.com long-lived-access-token sensor.geocoded_location
+# Homeassistant for location, steps, and sleep
+# base url, access key, geocoded location sensor, optional steps sensor, optional sleep sensor
+$ yarn ts-node src/main.cli.ts init hass https://hass.example.com long-lived-access-token sensor.geocoded_location sensor.device_daily_steps sensor.device_sleep_duration
 ```
 
-After location appears (via homeassistant, or, someday, telegram), devon also starts to pull wttr.in for min/max weather. Town name comes from the HA geocoded location sensor.
+After location appears, devon also starts to pull wttr.in for min/max weather. Town name comes from the HA geocoded location sensor.
 
-I also use an Apple Shortcut on my phone once a day to track sleep time and daily steps.
+Steps and sleep duration are synced automatically from HA every hour.

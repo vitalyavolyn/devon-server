@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 import { LetterboxdService } from './letterboxd.service';
 import { LastfmService } from './lastfm.service';
 import { RetroachievementsService } from './retroachievements.service';
-import { HomeassistantGpsService } from './homeassistant-gps.service';
+import { HomeassistantService } from './homeassistant.service';
 import { WttrService } from './wttr.service';
 import { WakatimeService } from './wakatime.service';
 import { WordleService } from './wordle.service';
@@ -23,7 +23,7 @@ export class SchedulerService implements OnApplicationBootstrap {
     private readonly letterboxdService: LetterboxdService,
     private readonly lastfmService: LastfmService,
     private readonly retroachievementsService: RetroachievementsService,
-    private readonly homeassistantGpsService: HomeassistantGpsService,
+    private readonly homeassistantService: HomeassistantService,
     private readonly wttrService: WttrService,
     private readonly wakatimeService: WakatimeService,
     private readonly wordleService: WordleService,
@@ -32,14 +32,14 @@ export class SchedulerService implements OnApplicationBootstrap {
 
   public async onApplicationBootstrap() {
     await Promise.all([
-    //   this.updateMyshows(),
-       this.updateLetterboxd(),
-    //   this.updateLastfm(),
-    //   this.updateRA(),
-       this.updateHassGps(),
-       this.updateWttr(),
-    //   this.updateWakatime(),
-       this.updateWordle(),
+      //   this.updateMyshows(),
+      this.updateLetterboxd(),
+      //   this.updateLastfm(),
+      //   this.updateRA(),
+      this.updateHassGps(),
+      this.updateWttr(),
+      //   this.updateWakatime(),
+      this.updateWordle(),
     ]);
   }
 
@@ -115,11 +115,20 @@ export class SchedulerService implements OnApplicationBootstrap {
     }
   }
 
+  @Cron(CronExpression.EVERY_HOUR)
+  private async updateHassHealth() {
+    try {
+      await this.homeassistantService.fetchHealthData();
+    } catch (e) {
+      this.logger.error('HASS health', e);
+    }
+  }
+
   @Cron(CronExpression.EVERY_3_HOURS)
   private async updateHassGps() {
     // this.logger.log('Updating HASS GPS');
     try {
-      await this.homeassistantGpsService.fetchUpdates();
+      await this.homeassistantService.fetchLocationData();
       await this.integrationModel.updateOne(
         { integration: 'hass' },
         { status: 'ok', lastSync: new Date() },

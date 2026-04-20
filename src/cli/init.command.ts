@@ -4,7 +4,7 @@ import { Initable } from '../types';
 import { LetterboxdService } from '../integration/letterboxd.service';
 import { LastfmService } from '../integration/lastfm.service';
 import { RetroachievementsService } from '../integration/retroachievements.service';
-import { HomeassistantGpsService } from '../integration/homeassistant-gps.service';
+import { HomeassistantService } from '../integration/homeassistant.service';
 import { WakatimeService } from '../integration/wakatime.service';
 import { WordleService } from '../integration/wordle.service';
 
@@ -15,7 +15,7 @@ export class InitCommand extends CommandRunner {
     private readonly letterboxdService: LetterboxdService,
     private readonly lastfmService: LastfmService,
     private readonly retroachievementsService: RetroachievementsService,
-    private readonly homeassistantGpsService: HomeassistantGpsService,
+    private readonly homeassistantService: HomeassistantService,
     private readonly wakatimeService: WakatimeService,
     private readonly wordleService: WordleService,
   ) {
@@ -35,7 +35,7 @@ export class InitCommand extends CommandRunner {
       case 'ra':
         return this.retroachievementsService;
       case 'hass':
-        return this.homeassistantGpsService;
+        return this.homeassistantService;
       case 'wakatime':
         return this.wakatimeService;
       case 'wordle':

@@ -13,13 +13,14 @@ import { LastfmService } from './lastfm.service';
 import { RetroachievementsSchema } from './schema/retroachievements.schema';
 import { RetroachievementsService } from './retroachievements.service';
 import { LocationSchema } from './schema/location.schema';
-import { HomeassistantGpsService } from './homeassistant-gps.service';
+import { HomeassistantService } from './homeassistant.service';
 import { WttrSchema } from './schema/wttr.schema';
 import { WttrService } from './wttr.service';
 import { WakatimeSchema } from './schema/wakatime.schema';
 import { WakatimeService } from './wakatime.service';
 import { WordleSchema } from './schema/wordle.schema';
 import { WordleService } from './wordle.service';
+import { TelegramAnswer, TelegramAnswerSchema } from '../bot/schema/telegram-answer.schema';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { WordleService } from './wordle.service';
       { name: 'Wttr', schema: WttrSchema },
       { name: 'Wakatime', schema: WakatimeSchema },
       { name: 'Wordle', schema: WordleSchema },
+      { name: TelegramAnswer.name, schema: TelegramAnswerSchema },
     ]),
   ],
   controllers: [],
@@ -49,7 +51,7 @@ import { WordleService } from './wordle.service';
     LastfmService,
     SchedulerService,
     RetroachievementsService,
-    HomeassistantGpsService,
+    HomeassistantService,
     WttrService,
     WakatimeService,
     WordleService,
@@ -59,7 +61,7 @@ import { WordleService } from './wordle.service';
     LetterboxdService,
     LastfmService,
     RetroachievementsService,
-    HomeassistantGpsService,
+    HomeassistantService,
     WttrService,
     WakatimeService,
     WordleService,
