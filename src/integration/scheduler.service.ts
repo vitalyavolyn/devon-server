@@ -115,7 +115,7 @@ export class SchedulerService implements OnApplicationBootstrap {
     }
   }
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_10_MINUTES)
   private async updateHassHealth() {
     try {
       await this.homeassistantService.fetchHealthData();
