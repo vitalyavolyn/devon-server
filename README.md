@@ -56,8 +56,11 @@ $ yarn ts-node src/main.cli.ts init wordle cookie
 # Homeassistant for location, steps, and sleep
 # base url, access key, geocoded location sensor, optional steps sensor, optional sleep sensor
 $ yarn ts-node src/main.cli.ts init hass https://hass.example.com long-lived-access-token sensor.geocoded_location sensor.device_daily_steps sensor.device_sleep_duration
+
+# Mapbox for alternative geocoding route
+$ yarn ts-node src/main.cli.ts init mapbox access-token
 ```
 
-After location appears, devon also starts to pull wttr.in for min/max weather. Town name comes from the HA geocoded location sensor.
+After location appears, devon also starts to pull wttr.in for min/max weather. Town name comes from the HA geocoded location sensor or mapbox.
 
 Steps and sleep duration are synced automatically from HA every hour.

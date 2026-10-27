@@ -7,6 +7,7 @@ import { RetroachievementsService } from '../integration/retroachievements.servi
 import { HomeassistantService } from '../integration/homeassistant.service';
 import { WakatimeService } from '../integration/wakatime.service';
 import { WordleService } from '../integration/wordle.service';
+import { MapboxService } from '../integration/mapbox.service';
 
 @Command({ name: 'init', description: 'Run initial integration setup' })
 export class InitCommand extends CommandRunner {
@@ -18,6 +19,7 @@ export class InitCommand extends CommandRunner {
     private readonly homeassistantService: HomeassistantService,
     private readonly wakatimeService: WakatimeService,
     private readonly wordleService: WordleService,
+    private readonly mapboxService: MapboxService,
   ) {
     super();
   }
@@ -40,6 +42,8 @@ export class InitCommand extends CommandRunner {
         return this.wakatimeService;
       case 'wordle':
         return this.wordleService;
+      case 'mapbox':
+        return this.mapboxService;
       default:
         return null;
     }

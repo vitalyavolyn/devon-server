@@ -21,6 +21,7 @@ import { WakatimeService } from './wakatime.service';
 import { WordleSchema } from './schema/wordle.schema';
 import { WordleService } from './wordle.service';
 import { TelegramAnswer, TelegramAnswerSchema } from '../bot/schema/telegram-answer.schema';
+import { MapboxService } from './mapbox.service';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { TelegramAnswer, TelegramAnswerSchema } from '../bot/schema/telegram-ans
     WttrService,
     WakatimeService,
     WordleService,
+    MapboxService,
   ],
   exports: [
     MyshowsService,
@@ -65,6 +67,7 @@ import { TelegramAnswer, TelegramAnswerSchema } from '../bot/schema/telegram-ans
     WttrService,
     WakatimeService,
     WordleService,
+    MapboxService,
   ],
 })
 export class IntegrationModule {}

@@ -15,6 +15,7 @@ import { endOfDay, startOfDay } from 'date-fns';
 import { InjectBot } from 'nestjs-telegraf';
 import { ConfigService } from '@nestjs/config';
 import { Telegraf } from 'telegraf';
+import { MapboxService } from './mapbox.service';
 
 const CONFIG_BASE_URL = 'hass_base_url';
 const CONFIG_API_KEY = 'hass_api_key';
@@ -38,18 +39,27 @@ export class HomeassistantService {
     @InjectModel(TelegramAnswer.name)
     private telegramAnswerModel: Model<TelegramAnswer>,
     @InjectBot() private readonly bot: Telegraf,
+    private readonly mapboxService: MapboxService,
     configService: ConfigService,
   ) {
     this.chatId = Number(configService.get('TELEGRAM_CHAT_ID'));
   }
 
-  private stateToDocument(state: any): Location {
+  private async stateToDocument(state: any): Promise<Location> {
+    const latitude = Math.round(state.attributes.location[0] * 100) / 100;
+    const longitude = Math.round(state.attributes.location[1] * 100) / 100;
+
+    let town: any = await this.mapboxService.getPlaceName(latitude, longitude);
+    if (!town) {
+      town = state.attributes.locality ?? null;
+    }
+
     return {
       source: 'hass',
       date: new Date(state.last_updated),
-      latitude: Math.round(state.attributes.location[0] * 100) / 100,
-      longitude: Math.round(state.attributes.location[1] * 100) / 100,
-      town: state.attributes.locality ?? null,
+      latitude,
+      longitude,
+      town,
     };
   }
 
@@ -102,7 +112,7 @@ export class HomeassistantService {
       });
 
     const state = await this.getDeviceState(baseUrl, apiKey, geocodeSensor);
-    const doc = this.stateToDocument(state);
+    const doc = await this.stateToDocument(state);
 
     const currentLocation = await this.locationModel.findOne();
     if (currentLocation && currentLocation.date >= doc.date) {
@@ -153,7 +163,7 @@ export class HomeassistantService {
       apiKeyInfo.value,
       geocodeSensorInfo.value,
     );
-    const doc = this.stateToDocument(state);
+    const doc = await this.stateToDocument(state);
 
     const currentLocation = await this.locationModel.findOne();
     if (currentLocation && currentLocation.date >= doc.date) {
